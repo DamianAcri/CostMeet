@@ -45,8 +45,10 @@ export default function LoginPage() {
         await resetPassword(email)
         setSuccess('Se ha enviado un enlace de recuperación a tu email.')
       }
-    } catch (error: any) {
-      const errorMessage = error.message || error.error_description || ''
+    } catch (error: unknown) {
+      // Type guard for authentication errors
+      const authError = error as { message?: string; error_description?: string }
+      const errorMessage = authError?.message || authError?.error_description || ''
       
       if (errorMessage.includes(AUTH_CONFIG.ERROR_CODES.INVALID_CREDENTIALS)) {
         setError('Credenciales inválidas. Verifica tu email y contraseña.')

@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js'
-
 export type Database = {
   public: {
     Tables: {
@@ -83,3 +81,12 @@ export type Database = {
     }
   }
 }
+
+// Helper types for easier usage
+export type Profile = Database['public']['Tables']['profiles']['Row']
+export type ProfileInsert = Database['public']['Tables']['profiles']['Insert']
+export type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
+
+export type Meeting = Database['public']['Tables']['meetings']['Row']
+export type MeetingInsert = Database['public']['Tables']['meetings']['Insert']
+export type MeetingUpdate = Database['public']['Tables']['meetings']['Update']

@@ -29,6 +29,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
+
+      if (error) {
+        if (error.code === AUTH_CONFIG.ERROR_CODES.PROFILE_NOT_FOUND) {
+          // No se encontró el perfil, intentar crearlo
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Profile not found, creating one...')
+          }
+          await createProfile(userId)
+          return
+        }
+        console.error('Error fetching profile:', error)
+      } else {
+        setProfile(data)
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error)
+    }
+  }
+
   useEffect(() => {
     // Obtener sesión inicial
     const getInitialSession = async () => {
@@ -74,33 +100,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     )
 
     return () => subscription.unsubscribe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const fetchProfile = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single()
-
-      if (error) {
-        if (error.code === AUTH_CONFIG.ERROR_CODES.PROFILE_NOT_FOUND) {
-          // No se encontró el perfil, intentar crearlo
-          if (process.env.NODE_ENV === 'development') {
-            console.log('Profile not found, creating one...')
-          }
-          await createProfile(userId)
-          return
-        }
-        console.error('Error fetching profile:', error)
-      } else {
-        setProfile(data)
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error)
-    }
-  }
 
   const createProfile = async (userId: string) => {
     try {

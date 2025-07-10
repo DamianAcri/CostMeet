@@ -17,5 +17,13 @@ export const AUTH_CONFIG = {
 
 export const VALIDATION_RULES = {
   PASSWORD_MIN_LENGTH: 6,
-  EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  MEETING_LIMITS: {
+    MAX_ATTENDEES: 100,
+    MAX_DURATION_MINUTES: 1440, // 24 hours
+    MAX_HOURLY_RATE: 10000,
+    MIN_ATTENDEES: 1,
+    MIN_DURATION_MINUTES: 1,
+    MIN_HOURLY_RATE: 0
+  }
 } as const

@@ -38,28 +38,73 @@ Reducir el despilfarro de tiempo y dinero en reuniones innecesarias o sobredimen
 
 ---
 
-# ⚙️ MVP
+# ⚙️ MVP - ESTADO ACTUAL: ✅ COMPLETADO
 
-## Funcionalidades clave:
+## Funcionalidades implementadas:
 
-1. Login con Google (OAuth)
-2. Crear reunión manualmente
-
-   * Nº de asistentes
-   * Duración
-   * Salario medio estimado
-3. Cálculo del coste
-4. Guardado de reuniones
-5. Dashboard:
-
+1. ✅ Login con Google (OAuth) + Email/Password
+2. ✅ Crear reunión manualmente
+   * Nº de asistentes (1-100)
+   * Duración en minutos (1-1440)
+   * Salario medio estimado (0-10,000)
+   * Fecha personalizable
+   * Descripción opcional
+3. ✅ Cálculo del coste en tiempo real
+4. ✅ Guardado de reuniones en Supabase
+5. ✅ Dashboard completo:
    * Total gastado semanalmente
-   * Lista de reuniones ordenadas por coste
-   * Historial de reuniones
+   * Total de reuniones semanales
+   * Coste promedio por reunión
+   * Total histórico de reuniones y costes
+   * Lista de reuniones ordenadas por fecha
+   * Edición y eliminación de reuniones
+6. ✅ Interfaz responsive y moderna
+7. ✅ Actualizaciones automáticas sin recargar página
+8. ✅ Gestión de perfiles de usuario
 
-## Bonus opcional:
+## Arquitectura técnica implementada:
 
-* Alertas si el coste supera X
-* Exportación a CSV/PDF
+### 🏗️ **ESTRUCTURA DEL PROYECTO**
+```
+src/
+├── app/                 # App Router de Next.js
+├── components/          # Componentes reutilizables
+├── contexts/           # Context API para autenticación
+├── hooks/              # Custom hooks (useMeetings)
+├── lib/                # Utilidades y configuraciones
+└── public/             # Archivos estáticos
+```
+
+### 🔐 **AUTENTICACIÓN Y SEGURIDAD**
+- Supabase Auth con OAuth (Google) y email/password
+- Row Level Security (RLS) implementado
+- Validación de variables de entorno
+- Gestión centralizada de errores
+- Logs protegidos para producción
+
+### 📊 **BASE DE DATOS**
+- PostgreSQL con Supabase
+- Tablas: `profiles` y `meetings`
+- Columna generada automáticamente para `total_cost`
+- Triggers para `updated_at`
+- Políticas de seguridad RLS
+
+### 🎨 **COMPONENTES PRINCIPALES**
+- `AuthContext`: Gestión centralizada de autenticación
+- `useMeetings`: Hook personalizado para CRUD de reuniones
+- `ProtectedRoute`: Protección de rutas
+- `NewMeetingForm`: Formulario de creación con validación
+- `EditMeetingModal`: Modal de edición
+- `MeetingsList`: Lista de reuniones
+- `StatsCards`: Tarjetas de estadísticas
+
+### 🚀 **FUNCIONALIDADES AVANZADAS**
+- Actualizaciones optimistas (UI se actualiza inmediatamente)
+- Cálculo de costes en tiempo real
+- Validación de formularios con mensajes de error
+- Manejo de estados de carga
+- Responsive design con TailwindCSS
+- Sin valores hardcodeados (todo en constantes)
 
 ---
 
