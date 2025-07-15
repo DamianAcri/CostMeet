@@ -31,14 +31,20 @@ export function useMeetings() {
     totalMeetingsAllTime: 0,
     totalCostAllTime: 0,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Empezar en true para carga inicial
   const [error, setError] = useState<string | null>(null);
+  const [hasInitialized, setHasInitialized] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch all meetings for the current user
-  const fetchMeetings = useCallback(async () => {
+  const fetchMeetings = useCallback(async (showLoading = true) => {
     if (!user) return;
 
-    setLoading(true);
+    if (showLoading) {
+      setLoading(true);
+    }
     setError(null);
 
     try {
@@ -46,28 +52,47 @@ export function useMeetings() {
         .from('meetings')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('meeting_date', { ascending: false });
 
       if (error) throw error;
 
       setMeetings(data || []);
       calculateStats(data || []);
+      
+      if (!hasInitialized) {
+        setHasInitialized(true);
+      }
     } catch (err: unknown) {
       console.error('Error fetching meetings:', err);
       setError(err instanceof Error ? err.message : 'Error al cargar las reuniones');
     } finally {
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
     }
-  }, [user]);
+  }, [user, hasInitialized]);
 
   // Calculate statistics from meetings
   const calculateStats = (meetingsData: Meeting[]) => {
     const now = new Date();
-    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    // Calcular el inicio de la semana (lunes)
+    const startOfWeek = new Date(now);
+    const day = startOfWeek.getDay();
+    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1); // Ajustar para que lunes sea el primer día
+    startOfWeek.setDate(diff);
+    startOfWeek.setHours(0, 0, 0, 0);
+    
+    // Calcular el final de la semana (domingo)
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
 
     const thisWeekMeetings = meetingsData.filter(meeting => {
-      const meetingDate = new Date(meeting.created_at);
-      return meetingDate >= oneWeekAgo;
+      // Usar meeting_date en lugar de created_at para calcular estadísticas semanales
+      // Si meeting_date es null, usar created_at como fallback
+      const meetingDate = new Date(meeting.meeting_date || meeting.created_at);
+      return meetingDate >= startOfWeek && meetingDate <= endOfWeek;
     });
 
     const totalCostThisWeek = thisWeekMeetings.reduce((sum, meeting) => sum + (meeting.total_cost || 0), 0);
@@ -90,7 +115,7 @@ export function useMeetings() {
       return null;
     }
 
-    setLoading(true);
+    setIsCreating(true);
     setError(null);
 
     try {
@@ -127,7 +152,7 @@ export function useMeetings() {
       setError(err instanceof Error ? err.message : 'Error al crear la reunión');
       return null;
     } finally {
-      setLoading(false);
+      setIsCreating(false);
     }
   };
 
@@ -138,7 +163,7 @@ export function useMeetings() {
       return null;
     }
 
-    setLoading(true);
+    setIsUpdating(true);
     setError(null);
 
     try {
@@ -174,7 +199,7 @@ export function useMeetings() {
       setError(err instanceof Error ? err.message : 'Error al actualizar la reunión');
       return null;
     } finally {
-      setLoading(false);
+      setIsUpdating(false);
     }
   };
 
@@ -185,7 +210,7 @@ export function useMeetings() {
       return false;
     }
 
-    setLoading(true);
+    setIsDeleting(true);
     setError(null);
 
     try {
@@ -208,7 +233,7 @@ export function useMeetings() {
       setError(err instanceof Error ? err.message : 'Error al eliminar la reunión');
       return false;
     } finally {
-      setLoading(false);
+      setIsDeleting(false);
     }
   };
 
@@ -219,10 +244,10 @@ export function useMeetings() {
 
   // Load meetings on mount
   useEffect(() => {
-    if (user) {
+    if (user && !hasInitialized) {
       fetchMeetings();
     }
-  }, [user, fetchMeetings]);
+  }, [user, fetchMeetings, hasInitialized]);
 
   return {
     meetings,
@@ -234,5 +259,8 @@ export function useMeetings() {
     deleteMeeting,
     fetchMeetings,
     calculateCost,
+    isCreating,
+    isUpdating,
+    isDeleting,
   };
 }

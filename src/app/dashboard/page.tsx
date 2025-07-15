@@ -13,7 +13,19 @@ import EditMeetingModal from '@/components/EditMeetingModal';
 
 export default function DashboardPage() {
   const { user, profile, signOut } = useAuth();
-  const { meetings, stats, loading, error, createMeeting, updateMeeting, calculateCost, deleteMeeting } = useMeetings();
+  const { 
+    meetings, 
+    stats, 
+    loading, 
+    error, 
+    createMeeting, 
+    updateMeeting, 
+    calculateCost, 
+    deleteMeeting,
+    isCreating,
+    isUpdating,
+    isDeleting
+  } = useMeetings();
   
   const [showNewMeetingForm, setShowNewMeetingForm] = useState(false);
   const [editingMeeting, setEditingMeeting] = useState<Meeting | null>(null);
@@ -127,7 +139,7 @@ export default function DashboardPage() {
                   onCancel={() => setShowNewMeetingForm(false)}
                   createMeeting={createMeeting}
                   calculateCost={calculateCost}
-                  loading={loading}
+                  loading={isCreating}
                 />
               </div>
             )}
@@ -151,7 +163,7 @@ export default function DashboardPage() {
                 meetings={meetings}
                 onEditMeeting={handleEditMeeting}
                 deleteMeeting={deleteMeeting}
-                loading={loading}
+                loading={isDeleting}
               />
             </div>
           </div>
@@ -165,7 +177,7 @@ export default function DashboardPage() {
           onSuccess={handleEditSuccess}
           updateMeeting={updateMeeting}
           calculateCost={calculateCost}
-          loading={loading}
+          loading={isUpdating}
         />
       </div>
     </ProtectedRoute>

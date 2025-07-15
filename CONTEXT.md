@@ -105,6 +105,16 @@ src/
 - Manejo de estados de carga
 - Responsive design con TailwindCSS
 - Sin valores hardcodeados (todo en constantes)
+- Estadísticas semanales basadas en `meeting_date` (no `created_at`)
+- Ordenación de reuniones por fecha de reunión
+
+### 🐛 **CORRECCIONES APLICADAS**
+- ✅ Problema de estadísticas semanales: ahora usa `meeting_date` en lugar de `created_at`
+- ✅ Cálculo de semana calendario completa (lunes a domingo) en lugar de "últimos 7 días"
+- ✅ Eliminación completa de valores hardcodeados en validaciones
+- ✅ Símbolos de moneda dinámicos según configuración del usuario
+- ✅ Refactorización completa del estado compartido entre componentes
+- ✅ Optimización de actualizaciones del estado para evitar re-renders innecesarios
 
 ---
 
