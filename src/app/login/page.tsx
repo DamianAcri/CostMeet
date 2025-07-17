@@ -27,6 +27,24 @@ export default function LoginPage() {
       return
     }
 
+    // Validar email
+    if (!VALIDATION_RULES.EMAIL_REGEX.test(email)) {
+      setError('Por favor, introduce un email válido')
+      return
+    }
+
+    // Validar password en signup/login
+    if (mode !== 'reset' && password.length < VALIDATION_RULES.PASSWORD_MIN_LENGTH) {
+      setError(`La contraseña debe tener al menos ${VALIDATION_RULES.PASSWORD_MIN_LENGTH} caracteres`)
+      return
+    }
+
+    // Validar nombre completo en signup
+    if (mode === 'signup' && fullName.trim().length < 2) {
+      setError('El nombre completo debe tener al menos 2 caracteres')
+      return
+    }
+
     try {
       setIsLoading(true)
       setError(null)

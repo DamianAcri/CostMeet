@@ -40,9 +40,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) {
         if (error.code === AUTH_CONFIG.ERROR_CODES.PROFILE_NOT_FOUND) {
           // No se encontró el perfil, intentar crearlo
-          if (process.env.NODE_ENV === 'development') {
-            console.log('Profile not found, creating one...')
-          }
           await createProfile(userId)
           return
         }
@@ -79,17 +76,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Escuchar cambios de autenticación
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Auth state change:', event, session?.user?.id)
-        }
-        
         setSession(session)
         setUser(session?.user ?? null)
         
         if (session?.user) {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('User authenticated, fetching profile...')
-          }
           await fetchProfile(session.user.id)
         } else {
           setProfile(null)
@@ -132,9 +122,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       setProfile(data)
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Profile created successfully:', data)
-      }
     } catch (error) {
       console.error('Error creating profile:', error)
     }
@@ -176,9 +163,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Si el usuario se crea inmediatamente (sin confirmación de email)
       if (data.user && data.session) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('User created and logged in immediately')
-        }
         await createProfile(data.user.id)
       }
 

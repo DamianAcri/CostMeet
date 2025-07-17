@@ -14,7 +14,13 @@ if (!supabaseKey) {
 }
 
 export function createClient() {
-  return createSupabaseClient<Database>(supabaseUrl!, supabaseKey!)
+  return createSupabaseClient<Database>(supabaseUrl!, supabaseKey!, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  })
 }
 
 // Cliente por defecto para usar en componentes

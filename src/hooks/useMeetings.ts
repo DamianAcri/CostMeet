@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase/client';
 import { Meeting, MeetingUpdate } from '@/lib/supabase/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { AUTH_CONFIG } from '@/lib/constants';
+import { logger, sanitizeErrorMessage } from '@/lib/logger';
+import { ErrorHandler } from '@/lib/errorHandler';
 
 export interface MeetingInput {
   title: string;
@@ -63,8 +65,12 @@ export function useMeetings() {
         setHasInitialized(true);
       }
     } catch (err: unknown) {
-      console.error('Error fetching meetings:', err);
-      setError(err instanceof Error ? err.message : 'Error al cargar las reuniones');
+      const appError = ErrorHandler.handleError(err, { 
+        userId: user?.id, 
+        action: 'fetch_meetings'
+      });
+      ErrorHandler.logError(appError, user?.id);
+      setError(ErrorHandler.getDisplayMessage(appError));
     } finally {
       if (showLoading) {
         setLoading(false);
@@ -79,7 +85,7 @@ export function useMeetings() {
     // Calcular el inicio de la semana (lunes)
     const startOfWeek = new Date(now);
     const day = startOfWeek.getDay();
-    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1); // Ajustar para que lunes sea el primer día
+    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
     startOfWeek.setDate(diff);
     startOfWeek.setHours(0, 0, 0, 0);
     
@@ -89,8 +95,6 @@ export function useMeetings() {
     endOfWeek.setHours(23, 59, 59, 999);
 
     const thisWeekMeetings = meetingsData.filter(meeting => {
-      // Usar meeting_date en lugar de created_at para calcular estadísticas semanales
-      // Si meeting_date es null, usar created_at como fallback
       const meetingDate = new Date(meeting.meeting_date || meeting.created_at);
       return meetingDate >= startOfWeek && meetingDate <= endOfWeek;
     });
@@ -99,13 +103,15 @@ export function useMeetings() {
     const totalCostAllTime = meetingsData.reduce((sum, meeting) => sum + (meeting.total_cost || 0), 0);
     const averageCostPerMeeting = meetingsData.length > 0 ? totalCostAllTime / meetingsData.length : 0;
 
-    setStats({
+    const newStats = {
       totalCostThisWeek,
       totalMeetingsThisWeek: thisWeekMeetings.length,
       averageCostPerMeeting,
       totalMeetingsAllTime: meetingsData.length,
       totalCostAllTime,
-    });
+    };
+
+    setStats(newStats);
   };
 
   // Create a new meeting
