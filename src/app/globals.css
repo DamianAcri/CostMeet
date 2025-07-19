@@ -1,112 +1,279 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #0a0a0a;
   
-  /* CostMeet Brand Palette */
-  --primary: #1B2A41;        /* Midnight Navy */
-  --secondary: #356AFF;      /* Cobalt Blue */
-  --success: #2EC4B6;        /* Mint Green */
-  --warning: #FFB200;        /* Amber 600 */
-  --error: #FF5C5C;          /* Coral Red */
+  /* CostMeet Financial-Grade Palette - Inspired by Stripe */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
   
-  /* Neutral Scale */
-  --bg-page: #FFFFFF;        /* White */
-  --bg-surface: #F7F9FC;     /* Soft background */
-  --border: #E5E9F0;         /* Borders */
-  --text-muted: #CBD2E0;     /* Muted text */
-  --text-primary: #1B2A41;   /* Primary text */
-  --text-secondary: #6B7280; /* Secondary text */
+  /* Blue Scale - Primary Brand */
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
   
-  /* Semantic colors with opacity variants */
-  --success-light: #2EC4B620;
-  --warning-light: #FFB20020;
-  --error-light: #FF5C5C20;
-  --secondary-light: #356AFF20;
+  /* Violet Scale - Premium Touch */
+  --violet-50: #f5f3ff;
+  --violet-100: #ede9fe;
+  --violet-500: #8b5cf6;
+  --violet-600: #7c3aed;
+  
+  /* Green Scale - Success/Savings */
+  --green-50: #f0fdf4;
+  --green-100: #dcfce7;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  
+  /* Red Scale - Costs/Alerts */
+  --red-50: #fef2f2;
+  --red-100: #fee2e2;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  
+  /* Amber Scale - Warnings */
+  --amber-50: #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  
+  /* Typography Scale - Financial Data Optimized */
+  --text-xs: 0.75rem;      /* 12px - Small labels */
+  --text-sm: 0.875rem;     /* 14px - Body text */
+  --text-base: 1rem;       /* 16px - Default */
+  --text-lg: 1.125rem;     /* 18px - Large body */
+  --text-xl: 1.25rem;      /* 20px - Headings */
+  --text-2xl: 1.5rem;      /* 24px - Section titles */
+  --text-3xl: 1.875rem;    /* 30px - Page titles */
+  --text-4xl: 2.25rem;     /* 36px - Hero numbers */
+  --text-5xl: 3rem;        /* 48px - Key metrics */
+  
+  /* Spacing Scale - Optimized for data density */
+  --space-px: 1px;
+  --space-0-5: 0.125rem;   /* 2px */
+  --space-1: 0.25rem;      /* 4px */
+  --space-1-5: 0.375rem;   /* 6px */
+  --space-2: 0.5rem;       /* 8px */
+  --space-2-5: 0.625rem;   /* 10px */
+  --space-3: 0.75rem;      /* 12px */
+  --space-4: 1rem;         /* 16px */
+  --space-5: 1.25rem;      /* 20px */
+  --space-6: 1.5rem;       /* 24px */
+  --space-8: 2rem;         /* 32px */
+  --space-10: 2.5rem;      /* 40px */
+  --space-12: 3rem;        /* 48px */
+  
+  /* Shadow Scale - Stripe-like depth */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
-/* Brand Component Classes */
+/* Base Typography - Inter font system */
+* {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-variation-settings: normal;
+}
+
+/* Global Reset with Financial-grade styling */
+body {
+  background: var(--slate-50);
+  color: var(--slate-900);
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Financial Data Typography Classes */
+.financial-metric {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-feature-settings: 'tnum' 1; /* Tabular numbers for alignment */
+  letter-spacing: -0.025em;
+}
+
+.currency-display {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-feature-settings: 'tnum' 1;
+  letter-spacing: -0.02em;
+}
+
+/* Button Component System */
 .btn-primary {
-  background-color: #1B2A41;
+  background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
   color: white;
-  border: 1px solid #1B2A41;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  border: none;
   font-weight: 500;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
-  background-color: #2a3f5f;
-  border-color: #2a3f5f;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 100%);
 }
 
 .btn-secondary {
-  background-color: #356AFF;
-  color: white;
-  border: 1px solid #356AFF;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  background: white;
+  color: var(--slate-700);
+  border: 1px solid var(--slate-200);
   font-weight: 500;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-secondary:hover {
-  background-color: #4a75ff;
-  border-color: #4a75ff;
+  border-color: var(--slate-300);
+  box-shadow: var(--shadow-sm);
+  background: var(--slate-50);
 }
 
-.btn-success {
-  background-color: #2EC4B6;
-  color: white;
-  border: 1px solid #2EC4B6;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+/* Card Components */
+.card-elevated {
+  background: white;
+  border: 1px solid var(--slate-200);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-elevated:hover {
+  border-color: var(--slate-300);
+  box-shadow: var(--shadow-md);
+}
+
+.card-metric {
+  background: white;
+  border: 1px solid var(--slate-200);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-metric:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--blue-200);
+}
+
+/* Input Components */
+.input-financial {
+  background: white;
+  border: 1.5px solid var(--slate-200);
+  border-radius: 8px;
+  padding: 12px 16px;
   font-weight: 500;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  color: var(--slate-900);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-xs);
 }
 
-.btn-success:hover {
-  background-color: #41d0c4;
-  border-color: #41d0c4;
+.input-financial:focus {
+  outline: none;
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
 }
 
-.btn-outline-primary {
-  background-color: white;
-  color: #1B2A41;
-  border: 1px solid #1B2A41;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+.input-financial::placeholder {
+  color: var(--slate-400);
+  font-weight: 400;
 }
 
-.btn-outline-primary:hover {
-  background-color: #1B2A41;
-  color: white;
+/* Typography Utility Classes */
+.heading-financial {
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--slate-900);
+  line-height: 1.1;
 }
 
-.card-primary {
-  background-color: white;
-  border: 1px solid #E5E9F0;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+.body-financial {
+  font-weight: 400;
+  color: var(--slate-600);
+  line-height: 1.6;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.label-financial {
+  font-weight: 600;
+  color: var(--slate-700);
+  font-size: var(--text-sm);
+  letter-spacing: 0.01em;
+}
+
+/* Status Indicators */
+.status-success {
+  background: var(--green-50);
+  color: var(--green-700);
+  border: 1px solid var(--green-200);
+}
+
+.status-warning {
+  background: var(--amber-50);
+  color: var(--amber-700);
+  border: 1px solid var(--amber-200);
+}
+
+.status-error {
+  background: var(--red-50);
+  color: var(--red-700);
+  border: 1px solid var(--red-200);
+}
+
+.status-info {
+  background: var(--blue-50);
+  color: var(--blue-700);
+  border: 1px solid var(--blue-200);
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Responsive Typography */
+@media (max-width: 640px) {
+  .heading-financial {
+    font-size: var(--text-2xl);
+  }
+  
+  .financial-metric {
+    font-size: var(--text-3xl);
+  }
 }

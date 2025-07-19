@@ -246,7 +246,6 @@ export default function NewMeetingForm({ onSuccess, onCancel, createMeeting, cal
                 onChange={(e) => handleInputChange('duration_minutes', Number(e.target.value))}
                 min={VALIDATION_RULES.MEETING_LIMITS.MIN_DURATION_MINUTES}
                 max={VALIDATION_RULES.MEETING_LIMITS.MAX_DURATION_MINUTES}
-                step={15}
                 className={`w-full px-4 py-3 pr-12 border-2 rounded-lg text-[#1B2A41] font-medium
                   focus:outline-none focus:border-[#356AFF] focus:ring-1 focus:ring-[#356AFF] transition-all duration-200
                   ${errors.duration_minutes ? 'border-[#FF5C5C] bg-[#FF5C5C]/5' : 'border-[#E5E9F0] bg-white hover:border-[#D1D9E0]'}`}
